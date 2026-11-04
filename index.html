@@ -1,0 +1,1543 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIỂM TRA TIẾNG ANH</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        blush: {
+                            50: '#fff5f7',
+                            100: '#ffe4ea',
+                            200: '#fecdd8',
+                            300: '#fda4b8',
+                            400: '#fb7191',
+                            500: '#f43f6b',
+                            600: '#e11d50',
+                        },
+                        ink: {
+                            800: '#1e1e24',
+                            900: '#121216',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fdf8f9;
+            color: #121216;
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+        }
+        .option-card {
+            transition: all 0.15s ease-in-out;
+        }
+        .option-card:hover {
+            transform: translateY(-1px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff5f7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #fda4b8;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fb7191;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-blush-200 selection:text-ink-900">
+
+    <!-- STICKY TOP BAR -->
+    <header class="sticky top-0 z-40 glass-header border-b border-blush-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-ink-900 text-blush-200 flex items-center justify-center font-extrabold text-lg shadow-sm border border-blush-300">
+                    EN
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-lg text-ink-900 tracking-wide uppercase">KIỂM TRA TIẾNG ANH</h1>
+                    <p class="text-xs text-gray-500">Thời gian làm bài: 45 phút • Thang điểm: 10.0 (Câu 1 – 31)</p>
+                </div>
+            </div>
+
+            <!-- Active Exam Controls -->
+            <div class="flex items-center gap-2 ml-auto">
+                <div id="headerControls" class="hidden flex items-center gap-2 sm:gap-3">
+                    <!-- Progress Pill -->
+                    <div class="hidden lg:flex items-center gap-2 bg-blush-50 border border-blush-200 px-3 py-1.5 rounded-xl text-xs font-semibold text-ink-800">
+                        <span>Tiến độ:</span>
+                        <span id="progressCount" class="text-blush-600 font-bold">0/30</span>
+                        <span>trắc nghiệm</span>
+                        <span class="text-gray-300">|</span>
+                        <span id="writingStatusBadge" class="text-amber-600">Câu 31: Chưa viết</span>
+                    </div>
+
+                    <!-- Timer Box -->
+                    <div id="timerContainer" class="flex items-center gap-2 bg-ink-900 text-white px-3.5 py-1.5 rounded-xl font-mono text-sm sm:text-base font-bold shadow-sm border border-blush-300">
+                        <svg class="w-4 h-4 text-blush-300 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span id="timerDisplay">45:00</span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button id="submitExamBtn" onclick="openSubmitModal()" class="bg-blush-500 hover:bg-blush-600 active:scale-95 text-white font-semibold text-xs sm:text-sm px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>Nộp bài</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6 sm:py-8">
+
+        <!-- 1. START SCREEN -->
+        <section id="startScreen" class="space-y-6">
+            <div class="bg-white rounded-3xl border border-blush-200 shadow-sm overflow-hidden">
+                <div class="bg-ink-900 text-white p-6 sm:p-8 relative overflow-hidden">
+                    <div class="absolute -right-10 -top-10 w-44 h-44 rounded-full bg-blush-500/20 blur-2xl pointer-events-none"></div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blush-500/20 border border-blush-300/30 text-blush-200 text-xs font-semibold mb-3">
+                        <span>⏱️ Thời gian: 45 Phút • Tổng điểm: 10.0 Điểm</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase">
+                        KIỂM TRA TIẾNG ANH
+                    </h2>
+                    <p class="text-gray-300 text-sm sm:text-base mt-2 max-w-2xl">
+                        Đề kiểm tra gồm <strong>30 câu trắc nghiệm (Câu 1 – 30: 7.5 điểm)</strong> và <strong>1 câu Viết thư phản hồi (Câu 31: 2.5 điểm)</strong>. Hệ thống sẽ bắt đầu tính giờ đếm ngược 45 phút ngay khi bấm bắt đầu làm bài.
+                    </p>
+                </div>
+
+                <div class="p-6 sm:p-8 space-y-6">
+                    <!-- Exam Structure Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                        <div class="p-4 rounded-2xl bg-blush-50/70 border border-blush-100">
+                            <div class="text-xs font-bold uppercase tracking-wider text-blush-600">Câu 1 – 10 (2.5 điểm)</div>
+                            <div class="font-bold text-ink-900 mt-1">Đọc điền Thông báo & Quảng cáo</div>
+                            <p class="text-xs text-gray-600 mt-1">Hoàn thành các chỗ trống trong thông báo và quảng cáo ngắn.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-blush-50/70 border border-blush-100">
+                            <div class="text-xs font-bold uppercase tracking-wider text-blush-600">Câu 11 – 15 (1.25 điểm)</div>
+                            <div class="font-bold text-ink-900 mt-1">Đọc điền Cụm từ / Mệnh đề</div>
+                            <p class="text-xs text-gray-600 mt-1">Chọn cụm từ hoặc mệnh đề phù hợp để hoàn chỉnh đoạn văn.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-blush-50/70 border border-blush-100">
+                            <div class="text-xs font-bold uppercase tracking-wider text-blush-600">Câu 16 – 30 (3.75 điểm)</div>
+                            <div class="font-bold text-ink-900 mt-1">Đọc hiểu & Sắp xếp câu</div>
+                            <p class="text-xs text-gray-600 mt-1">2 bài đọc hiểu (Câu 16–26) và 4 câu sắp xếp đoạn văn, thư, hội thoại (Câu 27–30).</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-blush-50/70 border border-blush-100">
+                            <div class="text-xs font-bold uppercase tracking-wider text-blush-600">Câu 31 (2.5 điểm)</div>
+                            <div class="font-bold text-ink-900 mt-1">Viết Thư Phản Hồi (60–80 từ)</div>
+                            <p class="text-xs text-gray-600 mt-1">Viết trực tiếp vào ô làm bài; hệ thống chấm điểm và sửa lỗi chi tiết.</p>
+                        </div>
+                    </div>
+
+                    <!-- Fixed 45-Minute Info & Start Button -->
+                    <div class="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="px-4 py-2.5 rounded-xl bg-gray-100 text-ink-900 text-xs sm:text-sm font-bold flex items-center gap-2">
+                                <svg class="w-4 h-4 text-blush-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>Thời gian làm bài: 45 phút (Tự động nộp bài khi hết giờ)</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <button onclick="startExam()" class="w-full sm:w-auto justify-center bg-blush-500 hover:bg-blush-600 active:scale-95 text-white font-bold px-8 py-3.5 rounded-2xl shadow-md hover:shadow-lg transition flex items-center gap-2 text-base">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>Bắt đầu làm bài (45 phút)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. EXAM WORKSPACE (HIDDEN UNTIL START) -->
+        <section id="examWorkspace" class="hidden space-y-8">
+
+            <!-- Score Banner (Hidden until submitted) -->
+            <div id="scoreSummaryBanner" class="hidden bg-white rounded-3xl border-2 border-ink-900 shadow-lg overflow-hidden">
+                <div class="bg-ink-900 text-white p-6 sm:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-blush-500 text-white text-xs font-bold uppercase tracking-wider">Kết quả bài làm • Thang điểm 10</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold mt-2">Tổng kết điểm số & Chữa bài chi tiết</h2>
+                        <p id="scoreSubtitle" class="text-gray-300 text-sm mt-1">Tổng điểm = Điểm Trắc nghiệm (Câu 1–30: tối đa 7.5đ) + Điểm Viết thư (Câu 31: tối đa 2.5đ).</p>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full lg:w-auto">
+                        <div class="bg-blush-500/20 border-2 border-blush-400 rounded-2xl px-4 py-3 text-center">
+                            <div class="text-xs font-bold text-blush-200 uppercase">TỔNG ĐIỂM (HỆ 10)</div>
+                            <div id="totalScoreOutOf10" class="text-2xl sm:text-3xl font-extrabold text-white">0.00 / 10</div>
+                        </div>
+                        <div class="bg-white/10 border border-white/15 rounded-2xl px-4 py-3 text-center">
+                            <div class="text-xs text-blush-200">Trắc nghiệm (Câu 1–30)</div>
+                            <div id="mcqScoreText" class="text-xl font-extrabold text-white">0/30 (0.00đ)</div>
+                        </div>
+                        <div class="bg-white/10 border border-white/15 rounded-2xl px-4 py-3 text-center">
+                            <div class="text-xs text-blush-200">Viết thư (Câu 31)</div>
+                            <div id="writingScoreBoxText" class="text-xl font-extrabold text-blush-300">0.00 / 2.5đ</div>
+                        </div>
+                        <div class="bg-white/10 border border-white/15 rounded-2xl px-4 py-3 text-center">
+                            <div class="text-xs text-blush-200">Thời gian làm</div>
+                            <div id="timeTakenText" class="text-xl font-extrabold text-white">00:00</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-6 py-4 bg-blush-50 flex flex-wrap items-center justify-between gap-3">
+                    <div class="text-xs sm:text-sm font-medium text-ink-800">
+                        💡 <strong>Mẹo:</strong> Cuộn xuống từng câu (1 ➔ 30) để xem giải thích chi tiết và xem phần sửa bài Viết thư ở Câu 31.
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="scrollToSection('writingSectionCard')" class="px-3.5 py-2 rounded-xl bg-blush-500 hover:bg-blush-600 text-white text-xs font-bold transition">
+                            Xem chấm bài Viết thư (Câu 31) ↓
+                        </button>
+                        <button onclick="resetExam()" class="px-3.5 py-2 rounded-xl bg-white border border-gray-300 hover:bg-gray-50 text-ink-900 text-xs font-bold transition">
+                            Làm lại từ đầu
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Question Navigator -->
+            <div class="bg-white rounded-2xl border border-blush-200 p-4 shadow-sm">
+                <div class="flex items-center justify-between mb-2.5">
+                    <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Bảng câu hỏi (Câu 1 ➔ Câu 31)</span>
+                    <div class="flex items-center gap-3 text-xs">
+                        <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-ink-900 inline-block"></span> Đã chọn</span>
+                        <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-gray-200 inline-block"></span> Chưa làm</span>
+                    </div>
+                </div>
+                <div id="questionNavGrid" class="flex flex-wrap gap-1.5">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- DYNAMIC QUESTIONS CONTAINER (Questions 1 to 30) -->
+            <div id="questionsContainer" class="space-y-8">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- QUESTION 31: INTERACTIVE LETTER WRITING + INSTANT AI GRADING -->
+            <div id="writingSectionCard" class="bg-white rounded-3xl border-2 border-blush-300 shadow-sm overflow-hidden scroll-mt-24">
+                <div class="bg-ink-900 text-white p-6">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span class="px-3 py-1 rounded-full bg-blush-500 text-white text-xs font-bold uppercase tracking-wider">
+                            Phần Tự Luận • Question 31 (2.5 điểm)
+                        </span>
+                        <span class="text-xs text-blush-200 font-medium">Viết trực tiếp & Chấm chữa chi tiết</span>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold mt-3">
+                        Question 31. Your friend has invited you to visit a futuristic green city exhibition this Sunday.
+                    </h3>
+                    <p class="text-gray-200 text-sm mt-2">
+                        Write a reply to your friend. In your message, you should:
+                    </p>
+                    <ul class="list-disc list-inside text-sm text-blush-100 mt-2 space-y-1">
+                        <li>Thank them and accept the invitation.</li>
+                        <li>Suggest a suitable time and place to meet.</li>
+                        <li>Ask whether you need to buy entry tickets online or bring an ID card.</li>
+                    </ul>
+                    <p class="text-xs font-semibold text-blush-300 mt-3">
+                        Write about 60–80 words.
+                    </p>
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <!-- Toolbar & Word Counter -->
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-semibold text-gray-600">Số từ hiện tại:</span>
+                            <span id="wordCountBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700">
+                                0 từ (Yêu cầu: 60–80 từ)
+                            </span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="clearWritingInput()" class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition">
+                                Xóa trắng ô viết
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Textarea -->
+                    <div>
+                        <textarea
+                            id="letterInput"
+                            rows="7"
+                            oninput="updateWordCount()"
+                            placeholder="Nhập nội dung bức thư trả lời của bạn tại đây (khoảng 60–80 từ)..."
+                            class="w-full rounded-2xl border border-gray-300 focus:border-blush-500 focus:ring-4 focus:ring-blush-100 p-4 text-sm sm:text-base text-ink-900 leading-relaxed outline-none transition"
+                        ></textarea>
+                    </div>
+
+                    <!-- Action Buttons for Writing -->
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+                        <p class="text-xs text-gray-500">
+                            Bấm <strong>"Chấm & Sửa trực tiếp Câu 31"</strong> để kiểm tra lỗi ngữ pháp và chấm điểm phần viết thư (tối đa 2.5đ).
+                        </p>
+                        <div class="flex items-center gap-3">
+                            <button
+                                type="button"
+                                id="gradeWritingBtn"
+                                onclick="gradeWritingWithAI()"
+                                class="bg-ink-900 hover:bg-ink-800 active:scale-95 text-white font-semibold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-sm transition flex items-center gap-2"
+                            >
+                                <span>✨ Chấm & Sửa trực tiếp Câu 31</span>
+                            </button>
+                            <button
+                                type="button"
+                                onclick="openSubmitModal()"
+                                class="bg-blush-500 hover:bg-blush-600 active:scale-95 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-sm transition"
+                            >
+                                Nộp bài kiểm tra
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Feedback Output Box -->
+                    <div id="aiFeedbackContainer" class="hidden pt-4 border-t border-gray-200 space-y-4">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- SUBMIT CONFIRMATION MODAL -->
+    <div id="submitModal" class="fixed inset-0 z-50 hidden bg-ink-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 border border-blush-200 shadow-2xl space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-blush-100 text-blush-600 flex items-center justify-center font-bold text-xl">
+                ✓
+            </div>
+            <h3 class="text-xl font-bold text-ink-900">Xác nhận nộp bài (Thang điểm 10)?</h3>
+            <p id="submitModalStatusText" class="text-sm text-gray-600 leading-relaxed">
+                Hệ thống sẽ dừng đồng hồ, chấm điểm 30 câu trắc nghiệm (7.5đ) và Câu 31 Viết thư (2.5đ) để tổng kết trên thang điểm 10.0.
+            </p>
+            <div class="flex items-center justify-end gap-3 pt-2">
+                <button onclick="closeSubmitModal()" class="px-4 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold transition">
+                    Làm tiếp
+                </button>
+                <button onclick="finalizeExamSubmission()" class="px-5 py-2.5 rounded-xl bg-blush-500 hover:bg-blush-600 text-white text-sm font-bold shadow-sm transition">
+                    Nộp bài & Xem điểm / 10
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================================
+        // EXAM DATA: NUMBERED sequentially FROM QUESTION 1 TO QUESTION 30 (+ Q31 Writing)
+        // ============================================================================
+        const EXAM_SECTIONS = [
+            {
+                id: "sec1",
+                title: "Read the following announcement and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 1 to 5.",
+                passageTitle: "TEEN MENTAL & PHYSICAL WELLNESS CAMP",
+                passageHtml: `
+                    <p class="mb-2">Are you looking for practical ways to boost your daily energy? Join our interactive weekend camp designed specifically for 11th graders who want to build lifelong healthy routines.</p>
+                    <p class="mb-2">Last month, our youth center held a fitness seminar, and hundreds of students <strong>(1) ______</strong> strong interest in stress management. To stay active and prevent chronic diseases in the future, you should choose fresh, <strong>(2) ______</strong> ingredients instead of artificial fast food that weakens your heart. Preparing wholesome home-cooked meals will strengthen your immune system and keep your body full of vitality.</p>
+                    <p class="mb-2">Moreover, you should never compare your personal progress with <strong>(3) ______</strong> teenagers because each body develops at its own rhythm. Consistent morning workouts help you build endurance and <strong>(4) ______</strong> a balanced posture naturally. Many high schoolers <strong>(5) ______</strong> to late-night screen time and sugary energy drinks, which seriously harms their sleep quality.</p>
+                    <p>Sign up this Friday at the school health club!</p>
+                `,
+                questions: [
+                    {
+                        num: 1,
+                        options: ["A. expressed", "B. delivered", "C. attracted", "D. reached"],
+                        correct: 0,
+                        explanation: "Cụm từ cố định (Collocation): <strong>express (strong/great) interest in sth</strong> = bày tỏ sự quan tâm/hứng thú lớn với cái gì."
+                    },
+                    {
+                        num: 2,
+                        options: ["A. nutrition", "B. nutritiously", "C. nutritious", "D. nutritionist"],
+                        correct: 2,
+                        explanation: "Từ loại (Word form): Trước danh từ <em>ingredients</em> (nguyên liệu) và sau tính từ <em>fresh</em> cần một tính từ. <strong>nutritious (adj)</strong> = giàu dinh dưỡng."
+                    },
+                    {
+                        num: 3,
+                        options: ["A. other", "B. another", "C. others", "D. the other"],
+                        correct: 0,
+                        explanation: "Lượng từ (Quantifiers): <strong>other + danh từ số nhiều (teenagers)</strong> = những thanh thiếu niên khác. (<em>another</em> + N số ít; <em>others</em> đứng một mình không kèm danh từ)."
+                    },
+                    {
+                        num: 4,
+                        options: ["A. maintain", "B. reduce", "C. repeat", "D. operate"],
+                        correct: 0,
+                        explanation: "Từ vựng theo ngữ cảnh: <strong>maintain a balanced posture / healthy weight</strong> = duy trì tư thế cân đối / cân nặng khỏe mạnh."
+                    },
+                    {
+                        num: 5,
+                        options: ["A. will addict", "B. have addicted", "C. are addicted", "D. were addicting"],
+                        correct: 2,
+                        explanation: "Cấu trúc tính từ/bị động: <strong>be addicted to sth</strong> = nghiện/thói quen phụ thuộc vào cái gì. Diễn tả thực trạng ở hiện tại nên dùng <em>are addicted</em>."
+                    }
+                ]
+            },
+            {
+                id: "sec2",
+                title: "Read the following advertisement and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 6 to 10.",
+                passageTitle: "EXPLORE THE ECO-SMART METROPOLIS 2060!",
+                passageHtml: `
+                    <p class="mb-2">Are you excited about how urban citizens will live in 2060? Visit our interactive dome this weekend to experience cutting-edge designs of sustainable future cities!</p>
+                    <p class="mb-2">Throughout the exhibition, visitors can test autonomous sky-trains engineered to <strong>(6) ______</strong> traffic jams during rush hours. Furthermore, these solar-powered networks will lower carbon emissions and leave zero negative impact <strong>(7) ______</strong> the surrounding ecosystem.</p>
+                    <p class="mb-2">Futuristic vertical towers covered with self-watering plants <strong>(8) ______</strong> truly breathtaking to international guests. Automated underground delivery pods are also becoming much more <strong>(9) ______</strong> than traditional petrol trucks for daily transport. To protect urban biodiversity, every resident <strong>(10) ______</strong> switch to clean public transit instead of driving high-emission private vehicles.</p>
+                    <p>Free entry tickets for all high school students!</p>
+                `,
+                questions: [
+                    {
+                        num: 6,
+                        options: ["A. limit", "B. treat", "C. expand", "D. accept"],
+                        correct: 0,
+                        explanation: "Từ vựng: <strong>limit traffic jams / congestion</strong> = hạn chế tình trạng tắc nghẽn giao thông."
+                    },
+                    {
+                        num: 7,
+                        options: ["A. to", "B. on", "C. with", "D. in"],
+                        correct: 1,
+                        explanation: "Giới từ đi kèm danh từ: <strong>impact on sth</strong> = tác động/ảnh hưởng lên cái gì."
+                    },
+                    {
+                        num: 8,
+                        options: ["A. are looking", "B. look", "C. looks", "D. were looking"],
+                        correct: 1,
+                        explanation: "Động từ nối (Linking verb): <strong>look + adj (trông có vẻ...)</strong> là động từ chỉ trạng thái nên không chia tiếp diễn. Chủ ngữ chính là <em>Futuristic vertical towers</em> (số nhiều) ở hiện tại nên dùng <strong>look</strong>."
+                    },
+                    {
+                        num: 9,
+                        options: ["A. economy", "B. economic", "C. economically", "D. economical"],
+                        correct: 3,
+                        explanation: "Từ loại & Nghĩa từ vựng: Sau <em>becoming much more</em> cần một tính từ. <strong>economical (adj)</strong> = tiết kiệm (nhiên liệu, chi phí), còn <em>economic</em> = thuộc về nền kinh tế."
+                    },
+                    {
+                        num: 10,
+                        options: ["A. should", "B. mustn't", "C. have to", "D. ought"],
+                        correct: 0,
+                        explanation: "Động từ khuyết thiếu (Modal verbs): Đưa ra lời khuyên/khuyến nghị chung cho mọi cư dân thành phố: <strong>every resident should + V nguyên mẫu</strong> (<em>have to</em> không đi với chủ ngữ số ít <em>every resident</em>, còn <em>ought</em> phải có <em>to</em>)."
+                    }
+                ]
+            },
+            {
+                id: "sec3",
+                title: "Read the following passage and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 11 to 15.",
+                passageTitle: "BRIDGING THE GENERATIONAL DIVIDE IN MODERN HOMES",
+                passageHtml: `
+                    <p class="mb-2">Growing up in a multigenerational household offers rich cultural values as well as daily communication hurdles. In many families, parents and grandparents often hold conservative beliefs regarding academic majors, screen time, and personal appearance. Consequently, when teenagers wish to pursue digital careers or modern fashion styles, family tension frequently appears at the dinner table.</p>
+                    <p class="mb-2">Family psychologists point out that high schoolers often hold <strong>(11) ______</strong> when discussing future ambitions with their elders. Instead of following their parents' traditional career paths without question, Gen Z teenagers strongly wish to <strong>(12) ______</strong> about their personal passions and independence. Sadly, when older relatives refuse to listen, young family members easily feel judged and disconnected.</p>
+                    <p class="mb-2">To narrow this generational gap, both sides need to converse <strong>(13) ______</strong>. Last month, several community centers <strong>(14) ______</strong> to guide teenagers and parents in handling household disagreements calmly. Today, more families are realizing that mutual empathy builds the warmest bond for every home. When parents listen without immediate judgment, elders <strong>(15) ______</strong> about their children's creative lifestyle choices, and family harmony naturally grows.</p>
+                `,
+                questions: [
+                    {
+                        num: 11,
+                        options: [
+                            "A. a completely different viewpoint",
+                            "B. a viewpoint completely different",
+                            "C. completely a different viewpoint",
+                            "D. a different viewpoint completely"
+                        ],
+                        correct: 0,
+                        explanation: "Trật tự từ trong cụm danh từ: <strong>Mạo từ (a) + Trạng từ chỉ mức độ (completely) + Tính từ (different) + Danh từ chính (viewpoint)</strong>."
+                    },
+                    {
+                        num: 12,
+                        options: [
+                            "A. express their honest opinions",
+                            "B. deliver their honest opinions",
+                            "C. attract their honest opinions",
+                            "D. reach their honest opinions"
+                        ],
+                        correct: 0,
+                        explanation: "Collocation (Cụm động từ - danh từ): <strong>express one's (honest) opinions</strong> = bày tỏ ý kiến/quan điểm chân thật của mình."
+                    },
+                    {
+                        num: 13,
+                        options: [
+                            "A. with each other in an open and respectful manner",
+                            "B. with each other on an open and respectful manner",
+                            "C. with an open and respectful manner with each other",
+                            "D. at an open with each other and respectful manner"
+                        ],
+                        correct: 0,
+                        explanation: "Cấu trúc cụm giới từ chỉ cách thức: <strong>converse/communicate with each other in a(n) + adj + manner</strong> (trò chuyện với nhau một cách cởi mở và tôn trọng)."
+                    },
+                    {
+                        num: 14,
+                        options: [
+                            "A. organized practical family counseling sessions",
+                            "B. have organized practical family counseling sessions",
+                            "C. organize practical family counseling sessions",
+                            "D. were organized practical family counseling sessions"
+                        ],
+                        correct: 0,
+                        explanation: "Thì của động từ: Có dấu hiệu <strong>Last month</strong> (tháng trước - quá khứ xác định) và chủ ngữ chủ động <em>several community centers</em> nên chia Quá khứ đơn chủ động: <strong>organized...</strong>"
+                    },
+                    {
+                        num: 15,
+                        options: [
+                            "A. are sounding quite supportive",
+                            "B. sound quite supportive",
+                            "C. sounds quite supportive",
+                            "D. were sounding quite supportive"
+                        ],
+                        correct: 1,
+                        explanation: "Động từ nối (Stative/Linking verb): <strong>sound + adj</strong> không chia ở thì tiếp diễn. Chủ ngữ <em>elders</em> (số nhiều) ở mệnh đề hiện tại nên dùng <strong>sound quite supportive</strong>."
+                    }
+                ]
+            },
+            {
+                id: "sec4",
+                title: "Read the following passage and mark the letter A, B, C or D on your answer sheet to indicate the correct answer to each of the questions from 16 to 20.",
+                passageTitle: "BALANCING TEEN WELLNESS IN THE DIGITAL AGE",
+                passageHtml: `
+                    <p class="mb-2 indent-6">Building a sustainable healthy lifestyle has become a top priority for today's high school students. Between heavy exam preparation and constant notifications from social media, teenagers frequently struggle to protect both their physical stamina and emotional balance. Nevertheless, adopting small, mindful adjustments in daily routines can remarkably improve long-term wellness and academic focus.</p>
+                    <p class="mb-2 indent-6">First of all, balanced nutrition serves as the cornerstone of teenage growth. Many adolescents regularly skip breakfast or grab ultra-processed instant noodles and bubble tea because of <strong class="underline">their</strong> fast preparation and low cost. However, these items are packed with trans fats and refined sugars, which can trigger chronic fatigue and weight gain. Health experts advise teenagers to prioritize fiber-rich vegetables, whole grains, and lean proteins. Checking ingredient labels before buying packaged snacks is another smart habit to avoid artificial preservatives.</p>
+                    <p class=" indent-6">Equally important, regular physical movement is <strong class="underline">vital</strong> for teenage development. Taking part in outdoor sports or cycling helps adolescents strengthen bone density, regulate body weight, and relieve classroom anxiety. During workouts, the brain releases endorphins—natural chemicals that elevate mood and sharpen concentration. In addition, getting eight hours of deep sleep every night is crucial. Artificial blue light from tablets and smartphones blocks melatonin production, making it difficult for teens to fall asleep. Therefore, putting away digital devices at least forty-five minutes before bedtime prevents chronic sleep loss and guarantees energetic school mornings.</p>
+                `,
+                questions: [
+                    {
+                        num: 16,
+                        questionText: "What is the main idea of the passage?",
+                        options: [
+                            "A. The severe harm of bubble tea and instant noodles on teenage bone density",
+                            "B. Essential daily habits for teenagers to maintain physical and mental wellness",
+                            "C. How blue light from tablets destroys high school students' academic grades",
+                            "D. The importance of reading chemical labels on packaged supermarket snacks"
+                        ],
+                        correct: 1,
+                        explanation: "Ý chính của toàn bài: Đoạn 1 giới thiệu tầm quan trọng của lối sống cân bằng ở tuổi teen, đoạn 2 nói về dinh dưỡng hợp lý, đoạn 3 nói về tập luyện thể chất và giấc ngủ. Do đó đáp án <strong>B</strong> bao quát trọn vẹn bài đọc."
+                    },
+                    {
+                        num: 17,
+                        questionText: "According to paragraph 2, why do many adolescents often choose instant noodles and bubble tea?",
+                        options: [
+                            "A. Because they contain high levels of fiber and lean proteins",
+                            "B. Because they are recommended by school health experts",
+                            "C. Because of their quick preparation and affordable price",
+                            "D. Because they help teenagers prevent chronic fatigue during exams"
+                        ],
+                        correct: 2,
+                        explanation: "Thông tin ở đoạn 2: <em>\"Many adolescents regularly skip breakfast or grab ultra-processed instant noodles and bubble tea because of their fast preparation and low cost.\"</em> (vì sự chuẩn bị nhanh chóng/tiện lợi và giá rẻ)."
+                    },
+                    {
+                        num: 18,
+                        questionText: "According to paragraph 3, which of the following is NOT mentioned as a benefit of regular physical movement?",
+                        options: [
+                            "A. Strengthening bone density",
+                            "B. Helping regulate body weight",
+                            "C. Releasing natural chemicals that improve mood",
+                            "D. Removing the need for eight hours of nightly sleep"
+                        ],
+                        correct: 3,
+                        explanation: "Đoạn 3 nêu lợi ích của vận động gồm: <em>strengthen bone density</em> (A), <em>regulate body weight</em> (B), <em>relieve classroom anxiety & release endorphins that elevate mood</em> (C). Chỉ có <strong>D</strong> (loại bỏ nhu cầu ngủ 8 tiếng mỗi đêm) là KHÔNG được đề cập."
+                    },
+                    {
+                        num: 19,
+                        questionText: "The word \"their\" in paragraph 2 refers to ______.",
+                        options: [
+                            "A. many adolescents",
+                            "B. whole grains",
+                            "C. instant noodles and bubble tea",
+                            "D. health experts"
+                        ],
+                        correct: 2,
+                        explanation: "Quy chiếu đại từ: <em>\"...grab ultra-processed instant noodles and bubble tea because of <u>their</u> fast preparation and low cost.\"</em> Từ <strong>their</strong> thay thế cho <strong>instant noodles and bubble tea</strong>."
+                    },
+                    {
+                        num: 20,
+                        questionText: "The word \"vital\" in paragraph 3 is closest in meaning to ______.",
+                        options: [
+                            "A. essential",
+                            "B. repetitive",
+                            "C. optional",
+                            "D. complicated"
+                        ],
+                        correct: 0,
+                        explanation: "Từ đồng nghĩa: <strong>vital = indispensable = essential</strong> (thiết yếu, vô cùng quan trọng)."
+                    }
+                ]
+            },
+            {
+                id: "sec5",
+                title: "Read the following passage and mark the letter A, B, C or D on your answer sheet to indicate the correct answer to each of the questions from 21 to 26.",
+                passageTitle: "SHAPING SUSTAINABLE SMART CITIES OF THE FUTURE",
+                passageHtml: `
+                    <p class="mb-2 indent-6"><strong>[Paragraph 1]</strong> As global urbanization <strong class="underline">expands</strong> at an unprecedented rate, municipal planners are reimagining metropolitan areas to become cleaner, smarter, and more livable. Rapid population growth in megacities has triggered urgent problems, including severe air contamination, housing shortages, and endless commuter delays. In response, futuristic city models are integrating green technology into urban infrastructure to create eco-friendly smart cities.</p>
+                    <p class="mb-2 indent-6"><strong>[Paragraph 2]</strong> One of the most transformative upgrades in future cities is intelligent public mobility. To cut down on greenhouse gas emissions, metropolitan authorities are phasing out fossil-fuel vehicles in favor of hydrogen-powered buses and autonomous maglev trains. Additionally, AI-driven traffic sensors embedded along city highways analyze vehicle flow in real time, automatically adjusting traffic lights to prevent bottlenecks. Consequently, commuters will spend far less time trapped in rush-hour congestion.</p>
+                    <p class="mb-2 indent-6"><strong>[Paragraph 3]</strong> Another groundbreaking feature lies in bioclimatic green architecture. Engineers are designing high-rise buildings fitted with transparent solar windows and rainwater harvesting systems. Many residential skyscrapers also feature vertical forests and rooftop community farms, which filter fine dust particles, cool down indoor temperatures, and supply fresh organic vegetables. <strong class="underline">These</strong> effectively counteract the urban heat island effect, making densely populated districts much healthier for residents.</p>
+                    <p class=" indent-6"><strong>[Paragraph 4]</strong> Ultimately, shifting toward smart urban ecosystems not only protects natural resources but also raises overall quality of life. By combining artificial intelligence with clean energy grids, city leaders can build a safer, greener, and more <strong class="underline">sustainable</strong> environment for future generations.</p>
+                `,
+                questions: [
+                    {
+                        num: 21,
+                        questionText: "According to paragraph 1, what has rapid population growth in megacities caused?",
+                        options: [
+                            "A. A complete removal of high-rise residential buildings",
+                            "B. Urgent problems such as air contamination, housing shortages, and commuter delays",
+                            "C. A sharp drop in the use of green technology in urban infrastructure",
+                            "D. The immediate disappearance of public transit networks"
+                        ],
+                        correct: 1,
+                        explanation: "Thông tin ở đoạn 1: <em>\"Rapid population growth in megacities has triggered urgent problems, including severe air contamination, housing shortages, and endless commuter delays.\"</em>"
+                    },
+                    {
+                        num: 22,
+                        questionText: "The word \"These\" in paragraph 3 refers to ______.",
+                        options: [
+                            "A. transparent solar windows",
+                            "B. vertical forests and rooftop community farms",
+                            "C. rainwater harvesting systems",
+                            "D. residential skyscrapers"
+                        ],
+                        correct: 1,
+                        explanation: "Quy chiếu đại từ ở đoạn 3: Câu trước nhắc đến <em>\"vertical forests and rooftop community farms, which filter fine dust particles, cool down indoor temperatures, and supply fresh organic vegetables. <u>These</u> effectively counteract the urban heat island effect...\"</em> ➔ <strong>These</strong> chỉ <strong>vertical forests and rooftop community farms</strong>."
+                    },
+                    {
+                        num: 23,
+                        questionText: "According to paragraph 2, AI-driven traffic sensors embedded along highways help ______.",
+                        options: [
+                            "A. construct more residential towers in suburban areas",
+                            "B. analyze vehicle flow in real time and prevent traffic bottlenecks",
+                            "C. manufacture hydrogen-powered buses for private owners",
+                            "D. supply solar electricity to underground maglev trains"
+                        ],
+                        correct: 1,
+                        explanation: "Thông tin ở đoạn 2: <em>\"AI-driven traffic sensors embedded along city highways analyze vehicle flow in real time, automatically adjusting traffic lights to prevent bottlenecks.\"</em>"
+                    },
+                    {
+                        num: 24,
+                        questionText: "The word \"expands\" in paragraph 1 is closest in meaning to ______.",
+                        options: [
+                            "A. grows",
+                            "B. slows down",
+                            "C. breaks down",
+                            "D. reduces"
+                        ],
+                        correct: 0,
+                        explanation: "Từ đồng nghĩa: <strong>expand</strong> (mở rộng, gia tăng nhanh chóng) gần nghĩa nhất với <strong>grows</strong>."
+                    },
+                    {
+                        num: 25,
+                        questionText: "The word \"sustainable\" in paragraph 4 is OPPOSITE in meaning to ______.",
+                        options: [
+                            "A. eco-friendly",
+                            "B. short-term and destructive",
+                            "C. durable",
+                            "D. reliable"
+                        ],
+                        correct: 1,
+                        explanation: "Từ trái nghĩa (OPPOSITE): <strong>sustainable</strong> (bền vững, lâu dài và thân thiện môi trường) >< <strong>short-term and destructive</strong> (ngắn hạn và gây tàn phá)."
+                    },
+                    {
+                        num: 26,
+                        questionText: "In which paragraph does the author discuss the integration of plants and renewable energy systems onto high-rise buildings?",
+                        options: [
+                            "A. Paragraph 1",
+                            "B. Paragraph 2",
+                            "C. Paragraph 3",
+                            "D. Paragraph 4"
+                        ],
+                        correct: 2,
+                        explanation: "Đoạn 3 (Paragraph 3) bàn về <em>transparent solar windows</em> (năng lượng tái tạo) và <em>vertical forests and rooftop community farms</em> (cây xanh trên các tòa nhà cao tầng)."
+                    }
+                ]
+            },
+            {
+                id: "sec6",
+                title: "Mark the letter A, B, C or D on your answer sheet to indicate the most correct arrangement of these sentences to make a meaningful paragraph, letter, or conversation (Questions 27 to 30).",
+                passageTitle: "SENTENCE & DIALOGUE ARRANGEMENT",
+                passageHtml: ``,
+                questions: [
+                    {
+                        num: 27,
+                        questionText: `
+                            <div class="space-y-1.5 text-sm font-normal text-ink-800 bg-gray-50 p-3.5 rounded-xl border border-gray-200 mb-2">
+                                <div><strong>a.</strong> For instance, thirty minutes of daily jogging or swimming strengthens heart muscles and improves blood circulation.</div>
+                                <div><strong>b.</strong> In conclusion, combining regular physical workouts with a balanced diet is the surest path to a long and healthy life.</div>
+                                <div><strong>c.</strong> Adopting active lifestyle habits during adolescence brings lasting physical and mental rewards.</div>
+                                <div><strong>d.</strong> Besides exercise, choosing fresh whole foods over sugary snacks helps young people maintain an ideal weight and prevent diabetes.</div>
+                                <div><strong>e.</strong> Indeed, engaging in consistent outdoor exercise plays a key role in staying fit and reducing school stress.</div>
+                            </div>
+                        `,
+                        options: [
+                            "A. d - e - b - c - a",
+                            "B. c - e - a - d - b",
+                            "C. c - e - d - a - b",
+                            "D. d - c - b - e - a"
+                        ],
+                        correct: 1,
+                        explanation: "Trình tự đoạn văn chuẩn: <strong>c</strong> (Câu chủ đề mở đoạn) ➔ <strong>e</strong> (Giải thích thêm về vai trò của tập thể dục) ➔ <strong>a</strong> (Ví dụ cụ thể <em>For instance</em> cho việc tập thể dục ở câu e) ➔ <strong>d</strong> (Bổ sung thêm yếu tố chế độ ăn <em>Besides exercise...</em>) ➔ <strong>b</strong> (Câu kết luận <em>In conclusion</em>)."
+                    },
+                    {
+                        num: 28,
+                        questionText: `
+                            <div class="space-y-1.5 text-sm font-normal text-ink-800 bg-gray-50 p-3.5 rounded-xl border border-gray-200 mb-2">
+                                <div class="font-semibold">Dear Lucas,</div>
+                                <div><strong>a.</strong> We also attended a live talk on zero-waste living, tested AI recycling robots, and picked up brochures on solar roofs.</div>
+                                <div><strong>b.</strong> How was your weekend? Have you ever visited a smart city fair or joined any green campaigns at your school?</div>
+                                <div><strong>c.</strong> I'm writing to share my experience at the Future Green Metropolis Fair organized by our city youth union last Sunday.</div>
+                                <div><strong>d.</strong> The fair really helped us visualize sustainable urban life in 2050, meet eco-minded friends, and learn how to cut our carbon footprint.</div>
+                                <div><strong>e.</strong> First, we explored scale models of driverless electric trams and admired sky-bridges covered in vertical gardens.</div>
+                                <div class="font-semibold">Best wishes,<br>Minh</div>
+                            </div>
+                        `,
+                        options: [
+                            "A. d - e - b - c - a",
+                            "B. c - e - a - d - b",
+                            "C. c - a - e - d - b",
+                            "D. c - d - b - e - a"
+                        ],
+                        correct: 1,
+                        explanation: "Trình tự bức thư thân mật: <strong>c</strong> (Lý do viết thư: kể về buổi triển lãm Chủ nhật tuần trước) ➔ <strong>e</strong> (Hoạt động đầu tiên tại triển lãm: <em>First, we explored...</em>) ➔ <strong>a</strong> (Hoạt động tiếp theo: <em>We also attended...</em>) ➔ <strong>d</strong> (Tổng kết ý nghĩa của sự kiện) ➔ <strong>b</strong> (Hỏi thăm lại người nhận ở cuối thư)."
+                    },
+                    {
+                        num: 29,
+                        questionText: `
+                            <div class="space-y-1.5 text-sm font-normal text-ink-800 bg-gray-50 p-3.5 rounded-xl border border-gray-200 mb-2">
+                                <div><strong>a.</strong> Khoa: Definitely! Rooftop farms and vertical forests will absorb carbon dioxide and cool down concrete buildings naturally.</div>
+                                <div><strong>b.</strong> Mai: Do you really think that green architecture can reduce the urban heat island effect in crowded cities, Khoa?</div>
+                                <div><strong>c.</strong> Mai: That sounds promising, especially if local governments encourage every new high-rise tower to include sky gardens.</div>
+                            </div>
+                        `,
+                        options: [
+                            "A. a - c - b",
+                            "B. b - a - c",
+                            "C. c - b - a",
+                            "D. b - c - a"
+                        ],
+                        correct: 1,
+                        explanation: "Trình tự hội thoại 3 lượt: <strong>b</strong> (Mai đặt câu hỏi cho Khoa) ➔ <strong>a</strong> (Khoa trả lời khẳng định và giải thích) ➔ <strong>c</strong> (Mai đồng tình với lời giải thích đó)."
+                    },
+                    {
+                        num: 30,
+                        questionText: `
+                            <div class="space-y-1.5 text-sm font-normal text-ink-800 bg-gray-50 p-3.5 rounded-xl border border-gray-200 mb-2">
+                                <div><strong>a.</strong> Nam: That's a great idea! How long did it take before you noticed a real difference in your energy levels?</div>
+                                <div><strong>b.</strong> Nam: You look so refreshed and full of energy lately, Ha. Have you changed anything in your daily routine?</div>
+                                <div><strong>c.</strong> Ha: Yes, I stopped using my phone before bed and started doing twenty minutes of morning yoga every day.</div>
+                                <div><strong>d.</strong> Ha: Just about two weeks, and now I wake up feeling completely rested without needing coffee.</div>
+                                <div><strong>e.</strong> Nam: Awesome! I think I'll try turning off my screen early tonight to improve my sleep schedule too.</div>
+                            </div>
+                        `,
+                        options: [
+                            "A. b - c - a - d - e",
+                            "B. b - a - c - d - e",
+                            "C. c - b - a - e - d",
+                            "D. b - d - c - a - e"
+                        ],
+                        correct: 0,
+                        explanation: "Trình tự hội thoại 5 lượt: <strong>b</strong> (Nam khen Hà tràn đầy năng lượng và hỏi có thay đổi thói quen gì không) ➔ <strong>c</strong> (Hà trả lời có: bỏ dùng điện thoại trước khi ngủ và tập yoga sáng) ➔ <strong>a</strong> (Nam hỏi mất bao lâu thì thấy hiệu quả) ➔ <strong>d</strong> (Hà đáp khoảng 2 tuần) ➔ <strong>e</strong> (Nam hào hứng muốn làm theo)."
+                    }
+                ]
+            }
+        ];
+
+        // Flatten all questions for easy lookup
+        const ALL_QUESTIONS = [];
+        EXAM_SECTIONS.forEach(sec => {
+            sec.questions.forEach(q => ALL_QUESTIONS.push(q));
+        });
+
+        // State variables
+        const EXAM_DURATION_MINUTES = 45;
+        let remainingSeconds = EXAM_DURATION_MINUTES * 60;
+        let elapsedSeconds = 0;
+        let timerInterval = null;
+        let userAnswers = {}; // { 1: 0, 2: 2, ... }
+        let isSubmitted = false;
+        let currentWritingScoreOutOf2_5 = 0; // Up to 2.5 points for Q31
+
+        // ============================================================================
+        // INITIALIZATION & RENDERING
+        // ============================================================================
+        function startExam() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('examWorkspace').classList.remove('hidden');
+            document.getElementById('headerControls').classList.remove('hidden');
+
+            renderNavigator();
+            renderQuestions();
+            updateProgressUI();
+
+            remainingSeconds = EXAM_DURATION_MINUTES * 60;
+            elapsedSeconds = 0;
+            const container = document.getElementById('timerContainer');
+            if (container) {
+                container.classList.remove('bg-rose-600');
+                container.classList.add('bg-ink-900');
+            }
+            updateTimerDisplay();
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (isSubmitted) return;
+                remainingSeconds--;
+                elapsedSeconds++;
+                updateTimerDisplay();
+                if (remainingSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    finalizeExamSubmission();
+                }
+            }, 1000);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(Math.max(0, remainingSeconds) / 60);
+            const secs = Math.max(0, remainingSeconds) % 60;
+            const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            const display = document.getElementById('timerDisplay');
+            if (display) display.textContent = formatted;
+
+            const container = document.getElementById('timerContainer');
+            if (remainingSeconds <= 300 && !isSubmitted) {
+                container.classList.add('bg-rose-600');
+                container.classList.remove('bg-ink-900');
+            }
+        }
+
+        function renderNavigator() {
+            const navGrid = document.getElementById('questionNavGrid');
+            let html = '';
+            ALL_QUESTIONS.forEach(q => {
+                const answered = userAnswers[q.num] !== undefined;
+                let bgClass = answered
+                    ? 'bg-ink-900 text-white border-ink-900'
+                    : 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-blush-100 hover:border-blush-300';
+
+                if (isSubmitted) {
+                    const isCorrect = userAnswers[q.num] === q.correct;
+                    bgClass = isCorrect
+                        ? 'bg-emerald-600 text-white border-emerald-600'
+                        : 'bg-rose-600 text-white border-rose-600';
+                }
+
+                html += `
+                    <button
+                        type="button"
+                        onclick="scrollToQuestion(${q.num})"
+                        class="w-8 h-8 rounded-lg text-xs font-bold border transition flex items-center justify-center ${bgClass}"
+                    >
+                        ${q.num}
+                    </button>
+                `;
+            });
+            // Add button for Q31
+            html += `
+                <button
+                    type="button"
+                    onclick="scrollToSection('writingSectionCard')"
+                    class="px-2.5 h-8 rounded-lg text-xs font-bold border border-blush-300 bg-blush-100 text-blush-600 hover:bg-blush-200 transition flex items-center justify-center"
+                >
+                    31 (Viết thư • 2.5đ)
+                </button>
+            `;
+            navGrid.innerHTML = html;
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            let html = '';
+
+            EXAM_SECTIONS.forEach((sec, secIdx) => {
+                html += `
+                    <div class="bg-white rounded-3xl border border-blush-200 shadow-sm overflow-hidden">
+                        <div class="bg-blush-50/80 border-b border-blush-200 px-6 py-4">
+                            <div class="text-xs font-bold uppercase tracking-wider text-blush-600">Phần ${secIdx + 1}</div>
+                            <p class="font-bold text-ink-900 text-sm sm:text-base mt-0.5">${sec.title}</p>
+                        </div>
+
+                        <div class="p-6 space-y-6">
+                            ${sec.passageHtml ? `
+                                <div class="bg-gray-50/90 rounded-2xl p-5 border border-gray-200/80 text-sm sm:text-base leading-relaxed text-ink-800">
+                                    <div class="font-extrabold text-ink-900 uppercase tracking-wide text-xs sm:text-sm mb-2 text-center border-b border-gray-200 pb-2">
+                                        ${sec.passageTitle}
+                                    </div>
+                                    ${sec.passageHtml}
+                                </div>
+                            ` : ''}
+
+                            <div class="space-y-5">
+                                ${sec.questions.map(q => renderSingleQuestionHTML(q)).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderSingleQuestionHTML(q) {
+            const selectedIdx = userAnswers[q.num];
+            let statusBadge = '';
+
+            if (isSubmitted) {
+                if (selectedIdx === q.correct) {
+                    statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">✔ Chính xác</span>`;
+                } else if (selectedIdx === undefined) {
+                    statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700">⚠ Chưa chọn (Đáp án: ${['A','B','C','D'][q.correct]})</span>`;
+                } else {
+                    statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-700">✘ Sai (Đáp án đúng: ${['A','B','C','D'][q.correct]})</span>`;
+                }
+            }
+
+            return `
+                <div id="q-card-${q.num}" class="p-4 sm:p-5 rounded-2xl border ${isSubmitted ? (selectedIdx === q.correct ? 'border-emerald-300 bg-emerald-50/20' : 'border-rose-300 bg-rose-50/20') : 'border-gray-200 bg-white'} scroll-mt-24 transition">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <div class="font-bold text-ink-900 text-sm sm:text-base">
+                            <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-lg bg-ink-900 text-white text-xs font-extrabold mr-2">
+                                Question ${q.num}
+                            </span>
+                            ${q.questionText ? `<span>${q.questionText}</span>` : `<span class="text-gray-500 text-xs sm:text-sm font-normal">Chọn phương án đúng nhất cho chỗ trống (${q.num})</span>`}
+                        </div>
+                        ${statusBadge}
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        ${q.options.map((opt, optIdx) => {
+                            const isSelected = selectedIdx === optIdx;
+                            let btnStyle = "bg-gray-50 hover:bg-blush-50/70 border-gray-200 text-ink-800";
+
+                            if (!isSubmitted && isSelected) {
+                                btnStyle = "bg-ink-900 text-white border-ink-900 shadow-sm";
+                            } else if (isSubmitted) {
+                                if (optIdx === q.correct) {
+                                    btnStyle = "bg-emerald-600 text-white border-emerald-600 font-bold shadow-sm";
+                                } else if (isSelected && optIdx !== q.correct) {
+                                    btnStyle = "bg-rose-600 text-white border-rose-600 line-through";
+                                } else {
+                                    btnStyle = "bg-gray-50 border-gray-200 text-gray-500 opacity-75";
+                                }
+                            }
+
+                            return `
+                                <button
+                                    type="button"
+                                    ${isSubmitted ? 'disabled' : ''}
+                                    onclick="selectOption(${q.num}, ${optIdx})"
+                                    class="option-card text-left px-4 py-3 rounded-xl border text-sm font-medium flex items-center justify-between gap-2 ${btnStyle}"
+                                >
+                                    <span>${opt}</span>
+                                    ${(!isSubmitted && isSelected) ? `<span class="text-blush-300 text-xs font-bold">Đã chọn</span>` : ''}
+                                    ${(isSubmitted && optIdx === q.correct) ? `<span>✓</span>` : ''}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    ${isSubmitted ? `
+                        <div class="mt-3.5 p-3.5 rounded-xl bg-white border border-blush-200 text-xs sm:text-sm text-ink-800 leading-relaxed">
+                            <span class="font-bold text-blush-600">💡 Giải thích: </span>
+                            ${q.explanation}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function selectOption(qNum, optIdx) {
+            if (isSubmitted) return;
+            userAnswers[qNum] = optIdx;
+            // Re-render just this question card & navigator for fast response
+            const qObj = ALL_QUESTIONS.find(item => item.num === qNum);
+            const cardEl = document.getElementById(`q-card-${qNum}`);
+            if (cardEl && qObj) {
+                cardEl.outerHTML = renderSingleQuestionHTML(qObj);
+            }
+            renderNavigator();
+            updateProgressUI();
+        }
+
+        function updateProgressUI() {
+            const count = Object.keys(userAnswers).length;
+            const progEl = document.getElementById('progressCount');
+            if (progEl) progEl.textContent = `${count}/30`;
+
+            const words = countWords(document.getElementById('letterInput')?.value || '');
+            const wBadge = document.getElementById('writingStatusBadge');
+            if (wBadge) {
+                if (words >= 60 && words <= 85) {
+                    wBadge.textContent = `Câu 31: Đã viết (${words} từ)`;
+                    wBadge.className = "text-emerald-600 font-bold";
+                } else if (words > 0) {
+                    wBadge.textContent = `Câu 31: Đang viết (${words} từ)`;
+                    wBadge.className = "text-amber-600 font-semibold";
+                } else {
+                    wBadge.textContent = "Câu 31: Chưa viết";
+                    wBadge.className = "text-amber-600";
+                }
+            }
+        }
+
+        function scrollToQuestion(qNum) {
+            const el = document.getElementById(`q-card-${qNum}`);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ============================================================================
+        // WRITING SECTION HELPERS & WORD COUNTER
+        // ============================================================================
+        function countWords(str) {
+            const cleaned = str.trim();
+            if (!cleaned) return 0;
+            return cleaned.split(/\s+/).length;
+        }
+
+        function updateWordCount() {
+            const text = document.getElementById('letterInput').value;
+            const words = countWords(text);
+            const badge = document.getElementById('wordCountBadge');
+
+            if (words === 0) {
+                badge.textContent = "0 từ (Yêu cầu: 60–80 từ)";
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700";
+            } else if (words < 60) {
+                badge.textContent = `${words} từ (Cần thêm khoảng ${60 - words} từ nữa)`;
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800";
+            } else if (words <= 85) {
+                badge.textContent = `${words} từ (Đạt chuẩn độ dài 60–80 từ ✓)`;
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800";
+            } else {
+                badge.textContent = `${words} từ (Hơi dài - nên rút gọn về khoảng 60–80 từ)`;
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700";
+            }
+            updateProgressUI();
+        }
+
+        function clearWritingInput() {
+            if (isSubmitted) return;
+            const textarea = document.getElementById('letterInput');
+            textarea.value = '';
+            updateWordCount();
+            textarea.focus();
+        }
+
+        // ============================================================================
+        // SUBMISSION & 10-POINT SCORING LOGIC
+        // ============================================================================
+        function analyzeWritingLocally(rawText) {
+            const text = rawText.trim();
+            const words = countWords(text);
+            const lower = text.toLowerCase();
+
+            const hasGreeting = /^(dear|hi|hello)\b/i.test(text);
+            const hasThankAccept = /(thank|thanks|pleased|happy|glad|love to|excited|delighted|accept|join|visit)/i.test(lower);
+            const hasTimePlace = /(meet|am|a\.m\.|pm|p\.m\.|o'clock|morning|afternoon|sunday|front of|gate|center|centre|station|park|entrance|at \d)/i.test(lower);
+            const hasQuestionTicketId = /(ticket|online|id card|register|bring|advance|need to|should i|do we)/i.test(lower);
+            const wordCountOk = words >= 55 && words <= 90;
+
+            let score = 0.25;
+            if (wordCountOk) score += 0.5;
+            else if (words >= 35) score += 0.25;
+
+            if (hasGreeting) score += 0.25;
+            if (hasThankAccept) score += 0.5;
+            if (hasTimePlace) score += 0.5;
+            if (hasQuestionTicketId) score += 0.5;
+
+            // Detect common grammar mistakes to provide instant line-by-line corrections
+            const corrections = [];
+            let improvedText = text;
+
+            if (!hasGreeting) {
+                corrections.push({
+                    originalSegment: "(Chưa có lời chào đầu thư)",
+                    correctedSegment: "Hi Alex, / Dear Lan,",
+                    explanation: "Thư phản hồi cho bạn bè cần có lời chào mở đầu ở dòng đầu tiên."
+                });
+                improvedText = "Hi Alex,\n" + improvedText;
+            }
+
+            if (/visit\s+futuristic\s+green\s+city\s+exhibition/i.test(text)) {
+                corrections.push({
+                    originalSegment: "visit futuristic green city exhibition",
+                    correctedSegment: "visit the futuristic green city exhibition",
+                    explanation: "Thiếu mạo từ xác định 'the' trước danh từ chỉ sự kiện triển lãm mà cả hai người đều đã biết."
+                });
+                improvedText = improvedText.replace(/visit\s+futuristic\s+green\s+city\s+exhibition/ig, "visit the futuristic green city exhibition");
+            }
+
+            if (/\bbring\s+ID\s+card\b/i.test(text)) {
+                corrections.push({
+                    originalSegment: "bring ID card",
+                    correctedSegment: "bring an ID card / bring our ID cards",
+                    explanation: "'ID card' là danh từ đếm được số ít nên cần có mạo từ 'an' hoặc tính từ sở hữu 'my/our' đứng trước."
+                });
+                improvedText = improvedText.replace(/\bbring\s+ID\s+card\b/ig, "bring an ID card");
+            }
+
+            if (/bring\s+(an\s+)?ID\s+card\?\s*Should\s+I\s+bring\s+my\s+ID\s+card\s+too\?/i.test(improvedText)) {
+                corrections.push({
+                    originalSegment: "...or bring ID card? Should I bring my ID card too?",
+                    correctedSegment: "...or should we bring our ID cards?",
+                    explanation: "Hai câu hỏi liên tiếp bị lặp ý 'bring ID card'. Nên gộp lại thành một câu hỏi mạch lạc, tự nhiên."
+                });
+                improvedText = improvedText.replace(/or\s+bring\s+(an\s+)?ID\s+card\?\s*Should\s+I\s+bring\s+my\s+ID\s+card\s+too\?/ig, "or should we bring our student ID cards?");
+            }
+
+            if (/\blooking\s+forward\s+to\s+see\s+you\b/i.test(text)) {
+                corrections.push({
+                    originalSegment: "looking forward to see you",
+                    correctedSegment: "looking forward to seeing you",
+                    explanation: "Sau cụm 'look forward to' động từ phải ở dạng V-ing (seeing)."
+                });
+                improvedText = improvedText.replace(/\blooking\s+forward\s+to\s+see\s+you\b/ig, "looking forward to seeing you");
+            }
+
+            if (/\bthank\s+for\b/i.test(text)) {
+                corrections.push({
+                    originalSegment: "thank for",
+                    correctedSegment: "thanks for / thank you for",
+                    explanation: "Cấu trúc đúng là 'Thanks for + V-ing' hoặc 'Thank you for + V-ing'."
+                });
+                improvedText = improvedText.replace(/\bthank\s+for\b/ig, "thanks for");
+            }
+
+            if (corrections.length > 1) {
+                score = Math.max(0.5, score - 0.25);
+            }
+
+            const finalScore2_5 = Math.min(2.5, Number(score.toFixed(2)));
+            const score10Equiv = ((finalScore2_5 / 2.5) * 10).toFixed(1);
+
+            const checklist = [
+                {
+                    criterion: "1. Cảm ơn và nhận lời mời (Thank & accept invitation)",
+                    passed: hasThankAccept,
+                    comment: hasThankAccept ? "Đã nêu rõ lời cảm ơn và đồng ý tham gia." : "Cần bổ sung câu cảm ơn và nhận lời mời của bạn."
+                },
+                {
+                    criterion: "2. Đề xuất thời gian & địa điểm hẹn (Time & place to meet)",
+                    passed: hasTimePlace,
+                    comment: hasTimePlace ? "Đã đề xuất giờ giấc và địa điểm gặp mặt cụ thể." : "Cần nêu rõ giờ hẹn và địa điểm gặp nhau."
+                },
+                {
+                    criterion: "3. Hỏi về mua vé online hoặc mang thẻ ID (Tickets online / ID card)",
+                    passed: hasQuestionTicketId,
+                    comment: hasQuestionTicketId ? "Đã đặt câu hỏi về việc mua vé online / mang thẻ ID." : "Cần hỏi bạn xem có phải đặt vé online hay mang thẻ ID không."
+                },
+                {
+                    criterion: "4. Độ dài bài viết (Yêu cầu 60–80 từ)",
+                    passed: wordCountOk,
+                    comment: `Bài viết hiện có ${words} từ (${wordCountOk ? 'Đạt yêu cầu' : 'Cần điều chỉnh về khoảng 60–80 từ'}).`
+                }
+            ];
+
+            return {
+                scoreOutOf2_5: finalScore2_5,
+                scoreOutOf10: score10Equiv,
+                overallComment: `Bài viết đạt ${words} từ, ${hasThankAccept && hasTimePlace && hasQuestionTicketId ? 'đáp ứng đầy đủ cả 3 ý chính trong đề bài' : 'cần bổ sung thêm ý để hoàn thiện tất cả yêu cầu của đề'}. ${corrections.length > 0 ? 'Hãy xem các gợi ý chỉnh sửa ngữ pháp và diễn đạt bên dưới để đạt điểm tối đa.' : 'Ngữ pháp và cách diễn đạt rõ ràng, mạch lạc.'}`,
+                taskChecklist: checklist,
+                detailedCorrections: corrections,
+                correctedUserVersion: improvedText,
+                upgradedBand10Version: "Hi Alex,\nThanks so much for inviting me! I'm really pleased to visit the futuristic green city exhibition with you this Sunday. Can we meet at 8:00 a.m. in front of the exhibition center gate so we can go in together? Also, do we need to buy entry tickets online in advance, or should we bring our student ID cards? I'm looking forward to seeing you!\nBest wishes,\nMinh"
+            };
+        }
+
+        function evaluateWritingLocallyOutOf2_5(rawText) {
+            if (!rawText || !rawText.trim()) return 0;
+            return analyzeWritingLocally(rawText).scoreOutOf2_5;
+        }
+            updateProgressUI();
+        }
+
+        function insertStarterTemplate() {
+            const textarea = document.getElementById('letterInput');
+            if (textarea.value.trim().length > 10) return;
+            textarea.value = `Hi Alex,\nThanks so much for inviting me! I'd love to join the Teen Fitness & Healthy Cooking Workshop with you this Saturday.\nCan we meet at ... in front of ...?\nAlso, do we need to ...?\nLooking forward to seeing you!\nBest,\n[Tên của bạn]`;
+            updateWordCount();
+            textarea.focus();
+        }
+
+        function loadHandwrittenIntoEditor() {
+            const textarea = document.getElementById('letterInput');
+            textarea.value = `Thanks for inviting me. I'm really pleased to visit futuristic green city exhibition with you this Sunday. Can we meet at 8 am in front of the exhibition center gate? Also, do we need to buy entry tickets online or bring ID card? Should I bring my ID card too? I'm looking forward to seeing you.\nLet me know soon,\nTrung`;
+            updateWordCount();
+            gradeWritingWithAI(true);
+        }
+
+        // ============================================================================
+        // SUBMISSION & 10-POINT SCORING LOGIC
+        // ============================================================================
+        function evaluateWritingLocallyOutOf2_5(rawText) {
+            const text = rawText.trim();
+            if (!text) return 0;
+            const words = countWords(text);
+            const lower = text.toLowerCase();
+
+            let score = 0.5; // Base effort
+            // 1. Word count check (target 60-80 words)
+            if (words >= 55 && words <= 90) score += 0.5;
+            else if (words >= 35) score += 0.25;
+
+            // 2. Greeting & Thank/Accept check
+            if (/(thank|pleased|happy|glad|love to|excited)/i.test(lower)) score += 0.5;
+
+            // 3. Time & Place check
+            if (/(meet|am|a\.m\.|pm|p\.m\.|o'clock|morning|front of|gate|center|station|park)/i.test(lower)) score += 0.5;
+
+            // 4. Question about ticket/online/ID/ingredients
+            if (/(ticket|online|id card|register|bring|ingredient|need to|should i)/i.test(lower)) score += 0.5;
+
+            return Math.min(2.5, Number(score.toFixed(2)));
+        }
+
+        function refresh10PointBanner() {
+            let correctCount = 0;
+            ALL_QUESTIONS.forEach(q => {
+                if (userAnswers[q.num] === q.correct) {
+                    correctCount++;
+                }
+            });
+
+            // 30 MCQs x 0.25 = 7.5 points max
+            const mcqPoints = correctCount * 0.25;
+            const total10 = Math.min(10, mcqPoints + currentWritingScoreOutOf2_5);
+
+            const minsTaken = Math.floor(elapsedSeconds / 60);
+            const secsTaken = elapsedSeconds % 60;
+
+            document.getElementById('mcqScoreText').textContent = `${correctCount}/30 (${mcqPoints.toFixed(2)}đ)`;
+            document.getElementById('writingScoreBoxText').textContent = `${currentWritingScoreOutOf2_5.toFixed(2)} / 2.50đ`;
+            document.getElementById('totalScoreOutOf10').textContent = `${total10.toFixed(2)} / 10`;
+            document.getElementById('timeTakenText').textContent = `${String(minsTaken).padStart(2, '0')}:${String(secsTaken).padStart(2, '0')}`;
+        }
+
+        function openSubmitModal() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const words = countWords(document.getElementById('letterInput').value);
+            const statusText = document.getElementById('submitModalStatusText');
+
+            statusText.innerHTML = `
+                Bạn đã hoàn thành <strong>${answeredCount}/30</strong> câu trắc nghiệm (7.5đ) và viết <strong>${words} từ</strong> ở Câu 31 Viết thư (2.5đ).<br><br>
+                Bấm <strong>"Nộp bài & Xem điểm / 10"</strong> để chấm tổng điểm trên thang 10.0 và nhận lời giải chi tiết!
+            `;
+            document.getElementById('submitModal').classList.remove('hidden');
+        }
+
+        function closeSubmitModal() {
+            document.getElementById('submitModal').classList.add('hidden');
+        }
+
+        function finalizeExamSubmission() {
+            closeSubmitModal();
+            isSubmitted = true;
+            if (timerInterval) clearInterval(timerInterval);
+
+            const rawWriting = document.getElementById('letterInput').value;
+            currentWritingScoreOutOf2_5 = evaluateWritingLocallyOutOf2_5(rawWriting);
+
+            refresh10PointBanner();
+            document.getElementById('scoreSummaryBanner').classList.remove('hidden');
+            renderNavigator();
+            renderQuestions();
+
+            // Automatically trigger AI writing evaluation
+            gradeWritingWithAI();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetExam() {
+            isSubmitted = false;
+            userAnswers = {};
+            currentWritingScoreOutOf2_5 = 0;
+            document.getElementById('scoreSummaryBanner').classList.add('hidden');
+            document.getElementById('aiFeedbackContainer').classList.add('hidden');
+            document.getElementById('letterInput').value = '';
+            updateWordCount();
+            startExam();
+        }
+
+        // ============================================================================
+        // DIRECT AI GRADING FOR QUESTION 31 (WITH 2.5PT RUBRIC SYNC TO 10-POINT TOTAL)
+        // ============================================================================
+        async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) return await response.json();
+                } catch (e) {
+                    // continue retry
+                }
+        async function gradeWritingWithAI() {
+            const rawText = document.getElementById('letterInput').value.trim();
+            const feedbackBox = document.getElementById('aiFeedbackContainer');
+            const gradeBtn = document.getElementById('gradeWritingBtn');
+
+            feedbackBox.classList.remove('hidden');
+
+            if (!rawText) {
+                currentWritingScoreOutOf2_5 = 0;
+                if (isSubmitted) refresh10PointBanner();
+                feedbackBox.innerHTML = `
+                    <div class="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-sm text-amber-900 space-y-3">
+                        <div class="font-bold">⚠ Chưa có nội dung bài viết ở Câu 31 (0.00 / 2.50 điểm)!</div>
+                        <p>Hãy nhập bức thư trả lời (khoảng 60–80 từ) vào ô bên trên rồi bấm <strong>"Chấm & Sửa trực tiếp Câu 31"</strong> để hệ thống chấm điểm và sửa lỗi chi tiết. Dưới đây là bài viết mẫu đạt 2.50/2.50 điểm:</p>
+                        <div class="p-4 rounded-xl bg-white border border-amber-200 text-ink-900">
+                            <strong>Bài mẫu tham khảo (72 từ):</strong><br>
+                            "Hi Alex,<br>
+                            Thanks so much for inviting me! I'm really pleased to visit the futuristic green city exhibition with you this Sunday. Can we meet at 8:00 a.m. in front of the exhibition center gate? Also, do we need to buy entry tickets online in advance, or should we bring our student ID cards? I'm looking forward to seeing you!<br>
+                            Best wishes,<br>
+                            Minh"
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const wordCount = countWords(rawText);
+            const localAnalysis = analyzeWritingLocally(rawText);
+            currentWritingScoreOutOf2_5 = localAnalysis.scoreOutOf2_5;
+            if (isSubmitted) refresh10PointBanner();
+
+            gradeBtn.disabled = true;
+            gradeBtn.innerHTML = `<span>⏳ Đang chấm & sửa chi tiết...</span>`;
+
+            feedbackBox.innerHTML = `
+                <div class="p-6 rounded-2xl bg-blush-50 border border-blush-200 flex items-center gap-3 text-sm font-semibold text-ink-800">
+                    <svg class="w-5 h-5 text-blush-600 animate-spin shrink-0" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                    </svg>
+                    <span>Đang phân tích ngữ pháp, từ vựng, độ dài (${wordCount} từ) và chấm điểm trên thang 2.5đ...</span>
+                </div>
+            `;
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const systemPrompt = `Bạn là giám khảo chấm thi Tiếng Anh lớp 11. Hãy chấm và sửa trực tiếp bài viết thư phản hồi (Question 31, yêu cầu 60-80 từ, điểm tối đa 2.5 điểm trong đề kiểm tra thang điểm 10).
+Đề bài Question 31: Your friend has invited you to visit a futuristic green city exhibition this Sunday. Write a reply (60-80 words):
+1. Thank them and accept the invitation.
+2. Suggest a suitable time and place to meet.
+3. Ask whether you need to buy entry tickets online or bring an ID card.
+Hãy chấm điểm chính xác trên thang 2.5 (ví dụ 2.5, 2.25, 2.0, 1.75...) và chỉ ra từng lỗi ngữ pháp, mạo từ, từ vựng hoặc câu bị lặp để sửa trực tiếp cho người làm bài.`;
+
+            const userQuery = `Bài làm của thí sinh (${wordCount} từ):
+"""
+${rawText}
+"""
+Hãy trả về JSON theo đúng schema.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            scoreOutOf2_5: { type: "NUMBER" },
+                            scoreOutOf10: { type: "STRING" },
+                            overallComment: { type: "STRING" },
+                            taskChecklist: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        criterion: { type: "STRING" },
+                                        passed: { type: "BOOLEAN" },
+                                        comment: { type: "STRING" }
+                                    },
+                                    propertyOrdering: ["criterion", "passed", "comment"]
+                                }
+                            },
+                            detailedCorrections: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        originalSegment: { type: "STRING" },
+                                        correctedSegment: { type: "STRING" },
+                                        explanation: { type: "STRING" }
+                                    },
+                                    propertyOrdering: ["originalSegment", "correctedSegment", "explanation"]
+                                }
+                            },
+                            correctedUserVersion: { type: "STRING" },
+                            upgradedBand10Version: { type: "STRING" }
+                        },
+                        propertyOrdering: [
+                            "scoreOutOf2_5",
+                            "scoreOutOf10",
+                            "overallComment",
+                            "taskChecklist",
+                            "detailedCorrections",
+                            "correctedUserVersion",
+                            "upgradedBand10Version"
+                        ]
+                    }
+                }
+            };
+
+            try {
+                const result = await fetchWithRetry(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                const data = JSON.parse(jsonText);
+                if (typeof data.scoreOutOf2_5 === 'number' && !isNaN(data.scoreOutOf2_5)) {
+                    currentWritingScoreOutOf2_5 = Math.min(2.5, Math.max(0, data.scoreOutOf2_5));
+                    if (isSubmitted) refresh10PointBanner();
+                }
+                renderAIFeedbackCard(data, wordCount);
+            } catch (err) {
+                renderAIFeedbackCard(localAnalysis, wordCount);
+            } finally {
+                gradeBtn.disabled = false;
+                gradeBtn.innerHTML = `<span>✨ Chấm & Sửa trực tiếp Câu 31</span>`;
+            }
+        }
+
+        function renderAIFeedbackCard(data, wordCount) {
+            const feedbackBox = document.getElementById('aiFeedbackContainer');
+            const correctionsHtml = (data.detailedCorrections && data.detailedCorrections.length > 0)
+                ? data.detailedCorrections.map(item => `
+                    <div class="p-3.5 rounded-xl bg-white border border-gray-200 space-y-1">
+                        <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
+                            <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-700 line-through font-medium">${escapeHtml(item.originalSegment)}</span>
+                            <span class="text-gray-400">➔</span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">${escapeHtml(item.correctedSegment)}</span>
+                        </div>
+                        <p class="text-xs text-gray-600">${escapeHtml(item.explanation)}</p>
+                    </div>
+                `).join('')
+                : `<div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm text-emerald-800 font-medium">🎉 Tuyệt vời! Câu chữ của bạn hầu như không có lỗi ngữ pháp hay chính tả nào đáng kể.</div>`;
+
+            const checklistHtml = (data.taskChecklist || []).map(c => `
+                <div class="flex items-start gap-2 text-xs sm:text-sm">
+                    <span class="${c.passed ? 'text-emerald-600' : 'text-rose-600'} font-bold">${c.passed ? '✔' : '✘'}</span>
+                    <div>
+                        <span class="font-semibold text-ink-900">${escapeHtml(c.criterion)}:</span>
+                        <span class="text-gray-600"> ${escapeHtml(c.comment)}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            feedbackBox.innerHTML = `
+                <div class="rounded-2xl border-2 border-ink-900 bg-blush-50/50 overflow-hidden">
+                    <div class="bg-ink-900 text-white px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blush-300">Kết quả chấm trực tiếp Câu 31</span>
+                            <h4 class="font-extrabold text-base sm:text-lg">Chi tiết sửa bài viết thư của bạn (${wordCount} từ)</h4>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-3 py-1.5 rounded-xl bg-blush-500 text-white font-extrabold text-sm">
+                                Điểm Câu 31: ${currentWritingScoreOutOf2_5.toFixed(2)} / 2.50đ
+                            </span>
+                            <span class="px-3 py-1.5 rounded-xl bg-white/10 text-blush-200 font-bold text-xs">
+                                (Quy đổi hệ 10: ${escapeHtml(data.scoreOutOf10)} / 10)
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-5 space-y-5">
+                        <div class="p-4 rounded-xl bg-white border border-blush-200 text-sm text-ink-800 leading-relaxed">
+                            <strong class="text-ink-900">Nhận xét tổng quan:</strong> ${escapeHtml(data.overallComment)}
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-white border border-gray-200 space-y-2">
+                            <div class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Kiểm tra các tiêu chí đề bài</div>
+                            ${checklistHtml}
+                        </div>
+
+                        <div class="space-y-2.5">
+                            <div class="text-xs font-bold uppercase tracking-wider text-blush-600">Sửa trực tiếp từng lỗi trong bài của bạn</div>
+                            <div class="grid grid-cols-1 gap-2.5">
+                                ${correctionsHtml}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+                                <div class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-2">
+                                    ✔ Bản sửa hoàn chỉnh giữ nguyên ý của bạn
+                                </div>
+                                <p class="text-sm text-ink-900 whitespace-pre-line leading-relaxed bg-white p-3.5 rounded-xl border border-emerald-200">${escapeHtml(data.correctedUserVersion)}</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-blush-200">
+                                <div class="text-xs font-bold uppercase tracking-wider text-blush-600 mb-2">
+                                    🌟 Bản nâng cấp từ vựng đạt 2.5/2.5đ tuyệt đối
+                                </div>
+                                <p class="text-sm text-ink-900 whitespace-pre-line leading-relaxed bg-blush-50/40 p-3.5 rounded-xl border border-blush-100">${escapeHtml(data.upgradedBand10Version)}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFallbackFeedback(rawText, wordCount) {
+            const feedbackBox = document.getElementById('aiFeedbackContainer');
+            feedbackBox.innerHTML = `
+                <div class="p-5 rounded-2xl bg-white border-2 border-blush-300 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h4 class="font-bold text-ink-900">Kết quả chấm Câu 31 (${wordCount} từ)</h4>
+                        <div class="flex items-center gap-2">
+                            <span class="px-3 py-1 rounded-full bg-blush-500 text-white text-xs font-bold">
+                                Điểm Câu 31: ${currentWritingScoreOutOf2_5.toFixed(2)} / 2.50đ
+                            </span>
+                            <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">
+                                ${wordCount >= 60 && wordCount <= 85 ? 'Đạt chuẩn 60–80 từ' : 'Lưu ý điều chỉnh số từ về 60–80 từ'}
+                            </span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-700">Đối chiếu bài viết của bạn với bản chuẩn đạt 2.5/2.5đ dưới đây:</p>
+                    <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-sm text-ink-900 leading-relaxed">
+                        <strong>Bản chuẩn Câu 31 (73 từ):</strong><br>
+                        "Hi Alex,<br>
+                        Thanks so much for inviting me! I'm really pleased to join the Teen Fitness & Healthy Cooking Workshop with you this Sunday. Can we meet at 8 a.m. in front of the youth center gate? Also, do we need to register online in advance, or should we bring our student ID cards? I'm looking forward to seeing you.<br>
+                        Let me know soon,<br>
+                        Trung"
+                    </div>
+                </div>
+            `;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+    </script>
+</body>
+</html>
+```
